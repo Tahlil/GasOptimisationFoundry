@@ -61,14 +61,6 @@ contract GasContract is Ownable, Constants {
 
     event AddedToWhitelist(address userAddress, uint256 tier);
 
-    modifier onlyAdminOrOwner() {
-        require(
-                checkForAdmin(msg.sender),
-                "Only Admin Check"
-            );
-        _;
-    }
-
     modifier checkIfWhiteListed(address sender) {
         address senderOfTx = msg.sender;
         require(
@@ -218,7 +210,8 @@ contract GasContract is Ownable, Constants {
         uint256 _ID,
         uint256 _amount,
         PaymentType _type
-    ) public onlyAdminOrOwner {
+    ) public {
+        require(checkForAdmin(msg.sender));
         require(
             _ID > 0,
             "Gas Contract - Update Payment function - ID must be greater than 0"
@@ -253,9 +246,9 @@ contract GasContract is Ownable, Constants {
     }
 
     function addToWhitelist(address _userAddrs, uint256 _tier)
-        public
-        onlyAdminOrOwner
+        public     
     {
+        require(checkForAdmin(msg.sender));
         require(
             _tier < 255,
             "Gas Contract - addToWhitelist function -  tier level should not be greater than 255"
