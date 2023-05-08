@@ -30,9 +30,6 @@ contract GasContract is Ownable, Constants {
 
     event AddedToWhitelist(address userAddress, uint256 tier);
 
-    event supplyChanged(address indexed, uint256 indexed);
-    event Transfer(address recipient, uint256 amount);
-   
     event WhiteListTransfer(address indexed);
 
     constructor(address[] memory _admins, uint256 _totalSupply) {
@@ -45,11 +42,6 @@ contract GasContract is Ownable, Constants {
                     balances[msg.sender] = totalSupply;
                 } else {
                     balances[_admins[ii]] = 0;
-                }
-                if (_admins[ii] == msg.sender) {
-                    emit supplyChanged(_admins[ii], totalSupply);
-                } else if (_admins[ii] != msg.sender) {
-                    emit supplyChanged(_admins[ii], 0);
                 }
             }
         }
@@ -80,7 +72,6 @@ contract GasContract is Ownable, Constants {
         if(balances[msg.sender] < _amount || bytes(_name).length >= 9) revert();
         balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
-        emit Transfer(_recipient, _amount);
         
         return true;
     }

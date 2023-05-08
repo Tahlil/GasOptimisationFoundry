@@ -16,3 +16,4 @@ Start - 2541445
 14: Update solidity version - 1675667
 15: Remove unnecessary functions and variables - 823275
 16: Remove unnecessary variables - 759452
+17: Remove unnecessary events - 737000
