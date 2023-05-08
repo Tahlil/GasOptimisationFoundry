@@ -1,17 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity 0.8.19;
 
-import "./Ownable.sol";
-
-contract Constants {
+contract GasContract {
+    uint256 public totalSupply = 0; // cannot be updated
     uint256 public tradeFlag = 1;
     uint256 public basicFlag = 0;
     uint256 public dividendFlag = 1;
-}
-
-contract GasContract is Ownable, Constants {
-    uint256 public totalSupply = 0; // cannot be updated
-
     mapping(address => uint256) public balances;
 
     mapping(address => uint256) public whitelist;
