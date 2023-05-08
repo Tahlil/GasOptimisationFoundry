@@ -188,18 +188,19 @@ contract GasContract is Ownable, Constants {
         if(!checkForAdmin(msg.sender) || _ID == 0 || _user == address(0)) revert();
 
         for (uint256 ii = 0; ii < payments[_user].length; ii++) {
-            if (payments[_user][ii].paymentID == _ID) {
-                payments[_user][ii].adminUpdated = true;
-                payments[_user][ii].admin = _user;
-                payments[_user][ii].paymentType = _type;
-                payments[_user][ii].amount = _amount;
+            Payment memory payment = payments[_user][ii];
+            if (payment.paymentID == _ID) {
+                payment.adminUpdated = true;
+                payment.admin = _user;
+                payment.paymentType = _type;
+                payment.amount = _amount;
                 bool tradingMode = getTradingMode();
                 addHistory(_user, tradingMode);
                 emit PaymentUpdated(
                     msg.sender,
                     _ID,
                     _amount,
-                    payments[_user][ii].recipientName
+                    payment.recipientName
                 );
             }
         }

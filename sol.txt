@@ -9,3 +9,4 @@ Start - 2541445
 7: Remove checklist modifier - 2090132
 8: Use global var msg.sender - 2080725
 9: Remove all requires - 1915743
+10: Reuse memory variable - 1867894
