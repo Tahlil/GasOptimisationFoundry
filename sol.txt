@@ -1,3 +1,4 @@
 #Solution
 Start - 2541445 
 1: smaller datatype - 2551052
+2: Variable packing - 2550452
