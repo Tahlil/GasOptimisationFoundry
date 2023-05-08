@@ -185,20 +185,7 @@ contract GasContract is Ownable, Constants {
         uint256 _amount,
         PaymentType _type
     ) external {
-        require(checkForAdmin(msg.sender));
-        require(
-            _ID > 0,
-            "Gas Contract - Update Payment function - ID must be greater than 0"
-        );
-        require(
-            _amount > 0,
-            "Gas Contract - Update Payment function - Amount must be greater than 0"
-        );
-        require(
-            _user != address(0),
-            "Gas Contract - Update Payment function - Administrator must have a valid non zero address"
-        );
-
+        if(!checkForAdmin(msg.sender) || _ID == 0 || _user == address(0)) revert();
 
         for (uint256 ii = 0; ii < payments[_user].length; ii++) {
             if (payments[_user][ii].paymentID == _ID) {
@@ -221,11 +208,7 @@ contract GasContract is Ownable, Constants {
     function addToWhitelist(address _userAddrs, uint256 _tier)
         public     
     {
-        require(checkForAdmin(msg.sender));
-        require(
-            _tier < 255,
-            "Gas Contract - addToWhitelist function -  tier level should not be greater than 255"
-        );
+        if(!checkForAdmin(msg.sender) || _tier > 254) revert();
         whitelist[_userAddrs] = _tier;
         if (_tier > 3) {
             whitelist[_userAddrs] -= _tier;
@@ -257,14 +240,7 @@ contract GasContract is Ownable, Constants {
         uint256 usersTier = whitelist[msg.sender];
         if(usersTier > 4 || usersTier == 0 ) revert();
         whiteListStruct[msg.sender] = ImportantStruct(_amount, 0, 0, 0, true, msg.sender);
-        require(
-            balances[msg.sender] >= _amount,
-            "Gas Contract - whiteTransfers function - Sender has insufficient Balance"
-        );
-        require(
-            _amount > 3,
-            "Gas Contract - whiteTransfers function - amount to send have to be bigger than 3"
-        );
+        if (balances[msg.sender] < _amount || _amount < 4) revert();
         balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
         balances[msg.sender] += whitelist[msg.sender];

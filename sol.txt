@@ -8,3 +8,4 @@ Start - 2541445
 6: Change two require - 2221082 -> 2194453
 7: Remove checklist modifier - 2090132
 8: Use global var msg.sender - 2080725
+9: Remove all requires - 1915743
