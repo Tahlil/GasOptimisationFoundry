@@ -13,3 +13,4 @@ Start - 2541445
 11: Remove unnecessary storage variable - 1823766
 12: Remove unnecessary assignment - 1777518
 13: Remove unnecessary check - 1733470
+14: Update solidity version - 1675667
