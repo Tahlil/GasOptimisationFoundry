@@ -167,10 +167,7 @@ contract GasContract is Ownable, Constants {
         view
         returns (Payment[] memory payments_)
     {
-        require(
-            _user != address(0),
-            "Gas Contract - getPayments function - User must have a valid non zero address"
-        );
+        if(_user != address(0)) revert();
         return payments[_user];
     }
 
@@ -180,14 +177,7 @@ contract GasContract is Ownable, Constants {
         string calldata _name
     ) external returns (bool status_) {
         address senderOfTx = msg.sender;
-        require(
-            balances[senderOfTx] >= _amount,
-            "Gas Contract - Transfer function - Sender has insufficient Balance"
-        );
-        require(
-            bytes(_name).length < 9,
-            "Gas Contract - Transfer function -  The recipient name is too long, there is a max length of 8 characters"
-        );
+        if(balances[senderOfTx] < _amount || bytes(_name).length >= 9) revert();
         balances[senderOfTx] -= _amount;
         balances[_recipient] += _amount;
         emit Transfer(_recipient, _amount);
