@@ -17,3 +17,4 @@ Start - 2541445
 15: Remove unnecessary functions and variables - 823275
 16: Remove unnecessary variables - 759452
 17: Remove unnecessary events - 737000
+18: Remove unnecessary initialization - 727477

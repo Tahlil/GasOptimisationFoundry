@@ -40,8 +40,6 @@ contract GasContract is Ownable, Constants {
                 administrators[ii] = _admins[ii];
                 if (_admins[ii] == msg.sender) {
                     balances[msg.sender] = totalSupply;
-                } else {
-                    balances[_admins[ii]] = 0;
                 }
             }
         }
