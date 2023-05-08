@@ -15,3 +15,4 @@ Start - 2541445
 13: Remove unnecessary check - 1733470
 14: Update solidity version - 1675667
 15: Remove unnecessary functions and variables - 823275
+16: Remove unnecessary variables - 759452
