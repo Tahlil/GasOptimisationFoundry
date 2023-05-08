@@ -6,3 +6,5 @@ Start - 2541445
 4: Remove only admin modifier - 2279546
 5: Change public to external - 2279546
 6: Change two require - 2221082 -> 2194453
+7: Remove checklist modifier - 2090132
+8: Use global var msg.sender - 2080725

@@ -61,24 +61,6 @@ contract GasContract is Ownable, Constants {
 
     event AddedToWhitelist(address userAddress, uint256 tier);
 
-    modifier checkIfWhiteListed(address sender) {
-        address senderOfTx = msg.sender;
-        require(
-            senderOfTx == sender,
-            "Gas Contract CheckIfWhiteListed modifier : revert happened because the originator of the transaction was not the sender"
-        );
-        uint256 usersTier = whitelist[senderOfTx];
-        require(
-            usersTier > 0,
-            "Gas Contract CheckIfWhiteListed modifier : revert happened because the user is not whitelisted"
-        );
-        require(
-            usersTier < 4,
-            "Gas Contract CheckIfWhiteListed modifier : revert happened because the user's tier is incorrect, it cannot be over 4 as the only tier we have are: 1, 2, 3; therfore 4 is an invalid tier for the whitlist of this contract. make sure whitlist tiers were set correctly"
-        );
-        _;
-    }
-
     event supplyChanged(address indexed, uint256 indexed);
     event Transfer(address recipient, uint256 amount);
     event PaymentUpdated(
@@ -176,9 +158,9 @@ contract GasContract is Ownable, Constants {
         uint256 _amount,
         string calldata _name
     ) external returns (bool status_) {
-        address senderOfTx = msg.sender;
-        if(balances[senderOfTx] < _amount || bytes(_name).length >= 9) revert();
-        balances[senderOfTx] -= _amount;
+       
+        if(balances[msg.sender] < _amount || bytes(_name).length >= 9) revert();
+        balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
         emit Transfer(_recipient, _amount);
         Payment memory payment;
@@ -189,7 +171,7 @@ contract GasContract is Ownable, Constants {
         payment.amount = _amount;
         payment.recipientName = _name;
         payment.paymentID = ++paymentCounter;
-        payments[senderOfTx].push(payment);
+        payments[msg.sender].push(payment);
         bool[] memory status = new bool[](tradePercent);
         for (uint256 i = 0; i < tradePercent; i++) {
             status[i] = true;
@@ -217,7 +199,6 @@ contract GasContract is Ownable, Constants {
             "Gas Contract - Update Payment function - Administrator must have a valid non zero address"
         );
 
-        address senderOfTx = msg.sender;
 
         for (uint256 ii = 0; ii < payments[_user].length; ii++) {
             if (payments[_user][ii].paymentID == _ID) {
@@ -228,7 +209,7 @@ contract GasContract is Ownable, Constants {
                 bool tradingMode = getTradingMode();
                 addHistory(_user, tradingMode);
                 emit PaymentUpdated(
-                    senderOfTx,
+                    msg.sender,
                     _ID,
                     _amount,
                     payments[_user][ii].recipientName
@@ -272,22 +253,22 @@ contract GasContract is Ownable, Constants {
     function whiteTransfer(
         address _recipient,
         uint256 _amount
-    ) public checkIfWhiteListed(msg.sender) {
-        address senderOfTx = msg.sender;
-        whiteListStruct[senderOfTx] = ImportantStruct(_amount, 0, 0, 0, true, msg.sender);
-        
+    ) public {
+        uint256 usersTier = whitelist[msg.sender];
+        if(usersTier > 4 || usersTier == 0 ) revert();
+        whiteListStruct[msg.sender] = ImportantStruct(_amount, 0, 0, 0, true, msg.sender);
         require(
-            balances[senderOfTx] >= _amount,
+            balances[msg.sender] >= _amount,
             "Gas Contract - whiteTransfers function - Sender has insufficient Balance"
         );
         require(
             _amount > 3,
             "Gas Contract - whiteTransfers function - amount to send have to be bigger than 3"
         );
-        balances[senderOfTx] -= _amount;
+        balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
-        balances[senderOfTx] += whitelist[senderOfTx];
-        balances[_recipient] -= whitelist[senderOfTx];
+        balances[msg.sender] += whitelist[msg.sender];
+        balances[_recipient] -= whitelist[msg.sender];
         
         emit WhiteListTransfer(_recipient);
     }
