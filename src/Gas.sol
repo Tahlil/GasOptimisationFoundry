@@ -3,14 +3,10 @@ pragma solidity 0.8.19;
 
 contract GasContract {
     uint256 public totalSupply = 0; // cannot be updated
-    uint256 public tradeFlag = 1;
-    uint256 public basicFlag = 0;
-    uint256 public dividendFlag = 1;
     mapping(address => uint256) public balances;
 
     mapping(address => uint256) public whitelist;
     address[5] public administrators;
-  
     
     struct ImportantStruct {
         uint256 amount;
@@ -60,11 +56,9 @@ contract GasContract {
         uint256 _amount,
         string calldata _name
     ) external returns (bool status_) {
-       
         if(balances[msg.sender] < _amount || bytes(_name).length >= 9) revert();
         balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
-        
         return true;
     }
 
