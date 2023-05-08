@@ -110,14 +110,6 @@ contract GasContract is Ownable, Constants {
         }
     }
 
-    function getPaymentHistory()
-        public
-        payable
-        returns (History[] memory paymentHistory_)
-    {
-        return paymentHistory;
-    }
-
     function checkForAdmin(address _user) public view returns (bool admin_) {
         bool admin = false;
         for (uint256 ii = 0; ii < administrators.length; ii++) {
@@ -128,7 +120,17 @@ contract GasContract is Ownable, Constants {
         return admin;
     }
 
-    function balanceOf(address _user) public view returns (uint256 balance_) {
+    function getPaymentHistory()
+        external
+        payable
+        returns (History[] memory paymentHistory_)
+    {
+        return paymentHistory;
+    }
+
+    
+
+    function balanceOf(address _user) external view returns (uint256 balance_) {
         uint256 balance = balances[_user];
         return balance;
     }
@@ -161,7 +163,7 @@ contract GasContract is Ownable, Constants {
     }
 
     function getPayments(address _user)
-        public
+        external
         view
         returns (Payment[] memory payments_)
     {
@@ -176,7 +178,7 @@ contract GasContract is Ownable, Constants {
         address _recipient,
         uint256 _amount,
         string calldata _name
-    ) public returns (bool status_) {
+    ) external returns (bool status_) {
         address senderOfTx = msg.sender;
         require(
             balances[senderOfTx] >= _amount,
@@ -210,7 +212,7 @@ contract GasContract is Ownable, Constants {
         uint256 _ID,
         uint256 _amount,
         PaymentType _type
-    ) public {
+    ) external {
         require(checkForAdmin(msg.sender));
         require(
             _ID > 0,
